@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { DataGrid } from '@mui/x-data-grid';
-import { TextField, Button, Modal, Box, FormControl, InputLabel, Select, MenuItem, /*Checkbox, FormControlLabel*/  } from '@mui/material';
+import { TextField, Button, Modal, Box, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import moment from 'moment';
@@ -10,7 +10,6 @@ function BorrowLaptop() {
     const [data, setData] = useState([]);
     const [sumYearData, setSumYearData] = useState([]);
     const [sumUserData, setSumUserData] = useState([]);
-    // const [filteredSumYearData, setFilteredSumYearData] = useState([]);
     const [filteredSumUserData, setFilteredSumUserData] = useState([]);
     const [searchText, setSearchText] = useState('');
     const [filteredData, setFilteredData] = useState([]);
@@ -71,26 +70,14 @@ function BorrowLaptop() {
                 }
             } catch (error) {
                 console.error('Error fetching data:', error);
-                // คุณสามารถเพิ่มการจัดการข้อผิดพลาดที่ดีขึ้นที่นี่ เช่น การแสดงข้อความข้อผิดพลาด
             }
         };
     
         fetchData();
-    }, []); // useEffect นี้จะทำงานเพียงครั้งเดียวเมื่อ component ถูกโหลด
+    }, []);
     
     useEffect(() => {
-        // // Filter sumYearData based on filter criteria
-        // const filteredSumYear = sumYearData.filter(item => {
-        //     const isYearMatch = !filterCriteria.year || item.year === filterCriteria.year;
-        //     const isBlackWhiteMatch = !filterCriteria.blackWhite || item.totalBlackWhite > 0;
-        //     const isColorMatch = !filterCriteria.color || item.totalColor > 0;
-
-        //     return isYearMatch && isBlackWhiteMatch && isColorMatch;
-        // });
-
-        // setFilteredSumYearData(filteredSumYear);
-
-        // Also filter sumUserData based on filter criteria
+        
         const filteredSumUser = sumUserData.filter(item => {
             const isYearMatch = !filterCriteria.year || item.year === filterCriteria.year;
             return isYearMatch;
@@ -141,10 +128,8 @@ function BorrowLaptop() {
     };
 
     const handleFilter = () => {
-        // Update filter criteria state
         setFilterCriteria({
             year: filterYear,
-
         });
 
         fetchFilteredData(
@@ -222,9 +207,6 @@ function BorrowLaptop() {
         <div>
             <h1 style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '1%' }}>Borrow Laptop</h1>
             <div style={{ display: 'flex', justifyContent: 'space-between', margin: '10px' }}>
-                {/* <div style={{ flex: 1 }}>
-                    <PieChartYear data={filteredSumYearData} />
-                </div> */}
                 <div style={{ flex: 1 }}>
                     <PieChartBorrow data={filteredSumUserData} />
                 </div>
@@ -258,7 +240,6 @@ function BorrowLaptop() {
                 </div>
             </div>
 
-            {/* Filter Modal */}
             <Modal
                 open={filterModalOpen}
                 onClose={() => setFilterModalOpen(false)}
