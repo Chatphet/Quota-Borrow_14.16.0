@@ -1,6 +1,23 @@
 import * as React from 'react';
 import { PieChart } from '@mui/x-charts/PieChart';
-import { Typography } from '@mui/material';
+import { useDrawingArea } from '@mui/x-charts/hooks';
+import { styled } from '@mui/material/styles';
+
+const StyledText = styled('text')(({ theme }) => ({
+  fill: theme.palette.text.primary,
+  textAnchor: 'middle',
+  dominantBaseline: 'central',
+  fontSize: 20,
+}));
+
+function PieCenterLabel({ children }) {
+  const { width, height, left, top } = useDrawingArea();
+  return (
+    <StyledText x={left + width / 2} y={top + height / 2}>
+      {children}
+    </StyledText>
+  );
+}
 
 function PieChartYear({ data }) {
 
@@ -26,13 +43,12 @@ function PieChartYear({ data }) {
 
   return (
     <div>
-      <Typography variant="h6" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>รายปี</Typography>
       <PieChart
         series={[
           {
             data: pieData,
             valueFormatter: (v) => `จำนวน ${v.value} แผ่น`,
-            innerRadius: 30,
+            innerRadius: 60,
             cornerRadius: 0,
           },
         ]}
@@ -51,7 +67,9 @@ function PieChartYear({ data }) {
           }
         }}
         {...size}
-      />
+        >
+        <PieCenterLabel>รายปี</PieCenterLabel>
+      </PieChart>
     </div>
   );
 }
