@@ -23,6 +23,8 @@ function PieChartBorrow({ data }) {
           {
             data: pieData,
             valueFormatter: (v) => `จำนวน ${v.value} ครั้ง`,
+            innerRadius: 30,
+            cornerRadius: 0,
           },
         ]}
         slotProps={{
