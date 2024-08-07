@@ -23,6 +23,8 @@ function PieChartList({ data }) {
           {
             data: pieData,
             valueFormatter: (v) => `จำนวน ${v.value} แผ่น`,
+            innerRadius: 30,
+            cornerRadius: 0,
           },
         ]}
         slotProps={{
