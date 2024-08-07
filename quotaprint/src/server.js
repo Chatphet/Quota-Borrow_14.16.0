@@ -253,8 +253,8 @@ app.get("/api/borrowList", async function (req, res, next) {
     const borrowStatus = req.query.borrowStatus;
     const location = req.query.location;
 
-    console.log('Filters received borrowList:', { year, division, user, borrowStartDate, borrowEndDate, status, borrowStatus, location });
-    console.log('------------');
+    // console.log('Filters received borrowList:', { year, division, user, borrowStartDate, borrowEndDate, status, borrowStatus, location });
+    // console.log('------------');
 
     let sqlQuery = `SELECT bn.*,
                            r.requestNo,
