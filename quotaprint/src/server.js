@@ -16,7 +16,7 @@ app.get("/api/year", async function (req, res, next) {
 
     let sqlQuery = `SELECT YEAR(r.deliveryDate) AS year FROM Request r`;
     
-    const validTables = ['QuotaPrint', 'BorrowNotebook']; // ใส่ชื่อตารางที่อนุญาต
+    const validTables = ['QuotaPrint', 'BorrowNotebook'];
     if (table && validTables.includes(table)) {
         sqlQuery += ` INNER JOIN ${table} x ON r.requestID = x.requestID`;
     }
@@ -41,7 +41,7 @@ app.get("/api/division", async function (req, res, next) {
 
     let sqlQuery = `SELECT r.divisionName FROM Request r`
 
-    const validTables = ['QuotaPrint', 'BorrowNotebook']; // ใส่ชื่อตารางที่อนุญาต
+    const validTables = ['QuotaPrint', 'BorrowNotebook'];
     if (table || validTables.includes(table)) {
         sqlQuery += ` INNER JOIN ${table} x ON r.requestID = x.requestID`;
     }
