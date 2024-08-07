@@ -1,14 +1,30 @@
 import * as React from 'react';
 import { PieChart } from '@mui/x-charts/PieChart';
-import { Typography } from '@mui/material';
+import { useDrawingArea } from '@mui/x-charts/hooks';
+import { styled } from '@mui/material/styles';
+
+const StyledText = styled('text')(({ theme }) => ({
+  fill: theme.palette.text.primary,
+  textAnchor: 'middle',
+  dominantBaseline: 'central',
+  fontSize: 20,
+}));
+
+function PieCenterLabel({ children }) {
+  const { width, height, left, top } = useDrawingArea();
+  return (
+    <StyledText x={left + width / 2} y={top + height / 2}>
+      {children}
+    </StyledText>
+  );
+}
 
 function PieChartBorrow({ data }) {
   const pieData = data.map((item, index) => ({
     id: index,
     value: item.sumUserYear,
     label: `${item.requester}`,
-    
-  }))
+  }));
 
   const size = {
     // width: 550,
@@ -17,13 +33,12 @@ function PieChartBorrow({ data }) {
 
   return (
     <div>  
-      <Typography variant="h6" style={{display: 'flex', alignItems: 'center', justifyContent: 'center', }}>รายบุคคล</Typography>
       <PieChart
         series={[
           {
             data: pieData,
             valueFormatter: (v) => `จำนวน ${v.value} ครั้ง`,
-            innerRadius: 30,
+            innerRadius: 60,
             cornerRadius: 0,
           },
         ]}
@@ -42,7 +57,9 @@ function PieChartBorrow({ data }) {
           }
         }}
         {...size}
-      />
+      >
+        <PieCenterLabel>รายบุคคล</PieCenterLabel>
+      </PieChart>
     </div>
   );
 }
