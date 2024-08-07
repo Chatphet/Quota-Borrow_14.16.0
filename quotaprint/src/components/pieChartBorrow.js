@@ -10,11 +10,11 @@ const StyledText = styled('text')(({ theme }) => ({
   fontSize: 20,
 }));
 
-function PieCenterLabel() {
+function PieCenterLabel({ children }) {
   const { width, height, left, top } = useDrawingArea();
   return (
     <StyledText x={left + width / 2} y={top + height / 2}>
-      รายบุคคล
+      {children}
     </StyledText>
   );
 }
@@ -58,7 +58,7 @@ function PieChartBorrow({ data }) {
         }}
         {...size}
       >
-        <PieCenterLabel />
+        <PieCenterLabel>รายบุคคล</PieCenterLabel>
       </PieChart>
     </div>
   );
