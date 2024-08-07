@@ -263,6 +263,7 @@ app.get("/api/borrowList", async function (req, res, next) {
                            r.divisionName,
                            r.ownerJob,
                            r.deliveryDate,
+                           r.requestDetail,
                            p.priorityName,
                            rs.requestStatus,
                            bs.borrowStatusName,
