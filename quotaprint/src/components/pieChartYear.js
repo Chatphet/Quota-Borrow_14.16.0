@@ -10,14 +10,15 @@ const StyledText = styled('text')(({ theme }) => ({
   fontSize: 20,
 }));
 
-function PieCenterLabel({ children }) {
+function PieCenterLabel() {
   const { width, height, left, top } = useDrawingArea();
   return (
     <StyledText x={left + width / 2} y={top + height / 2}>
-      {children}
+      รายปี
     </StyledText>
   );
 }
+
 
 function PieChartYear({ data }) {
 
@@ -68,7 +69,7 @@ function PieChartYear({ data }) {
         }}
         {...size}
         >
-        <PieCenterLabel>รายปี</PieCenterLabel>
+        <PieCenterLabel />
       </PieChart>
     </div>
   );
