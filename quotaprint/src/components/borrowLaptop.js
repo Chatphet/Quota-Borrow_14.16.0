@@ -35,7 +35,7 @@ function BorrowLaptop() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                // ดึงข้อมูลจาก API ทั้งหมดพร้อมกัน
+   
                 const [divisionsResponse, statusesResponse, borrowStatusResponse, locationResponse, yearResponse] = await Promise.all([
                     axios.get('http://localhost:5000/api/division', { params: { table: 'BorrowNotebook' } }),
                     axios.get('http://localhost:5000/api/status'),
@@ -44,24 +44,21 @@ function BorrowLaptop() {
                     axios.get('http://localhost:5000/api/year', { params: { table: 'BorrowNotebook' } })
                 ]);
     
-                // แปลงข้อมูลจาก response เป็นข้อมูลที่ต้องการ
                 const divisionData = divisionsResponse.data.map(item => item.divisionName);
                 const statusData = statusesResponse.data.map(item => item.requestStatus);
                 const borrowStatusData = borrowStatusResponse.data.map(item => item.borrowStatusName);
                 const locationData = locationResponse.data.map(item => item.locationName);
     
-                // ตั้งค่าข้อมูลลงใน state
                 setDivisions(divisionData);
                 setStatuses(statusData);
                 setBorrowStatuses(borrowStatusData);
                 setLocations(locationData);
     
                 const sumYearData = yearResponse.data;
-                const yearData = [...new Set(sumYearData.map(item => item.year))].sort((a, b) => b - a); // สร้างลิสต์ปีที่ไม่ซ้ำและเรียงลำดับจากมากไปน้อย
+                const yearData = [...new Set(sumYearData.map(item => item.year))].sort((a, b) => b - a);
                 setYears(yearData);
                 setSumYearData(sumYearData);
     
-                // กำหนดปีล่าสุดเป็นค่าเริ่มต้นของฟิลเตอร์ปี และเรียก fetchFilteredData
                 if (sumYearData.length > 0) {
                     const mostRecentYear = Math.max(...sumYearData.map(item => item.year));
                     setFilterYear(mostRecentYear);
@@ -228,7 +225,7 @@ function BorrowLaptop() {
                     <DataGrid
                         rows={filteredData.map((row, index) => ({ id: index, ...row }))}
                         columns={columns}
-                        checkboxSelection={true}
+                        checkboxSelection={false}
                         autoHeight
                         initialState={{
                             pagination: {
