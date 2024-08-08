@@ -228,7 +228,7 @@ function QuotaPrint() {
                     <DataGrid
                         rows={filteredData.map((row, index) => ({ id: index, ...row }))}
                         columns={columns}
-                        checkboxSelection={true}
+                        checkboxSelection={false}
                         autoHeight
                         initialState={{
                             pagination: {
