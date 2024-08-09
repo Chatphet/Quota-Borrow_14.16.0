@@ -40,6 +40,7 @@ function PieChartYear({ data }) {
   const totalSum = sortedData.reduce((acc, item) => acc + item.totalBlackWhite + item.totalColor, 0);
 
   const size = {
+    // width: 550,
     height: 200,
   };
 
