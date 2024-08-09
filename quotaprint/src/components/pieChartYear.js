@@ -10,11 +10,12 @@ const StyledText = styled('text')(({ theme }) => ({
   fontSize: 20,
 }));
 
-function PieCenterLabel({ children }) {
+function PieCenterLabel({ totalSum }) {
   const { width, height, left, top } = useDrawingArea();
   return (
     <StyledText x={left + width / 2} y={top + height / 2}>
-      {children}
+      <tspan x={left + width / 2} dy="-0.6em">รายปี</tspan>
+      <tspan x={left + width / 2} dy="1.2em">{`${totalSum} แผ่น`}</tspan>
     </StyledText>
   );
 }
@@ -36,8 +37,9 @@ function PieChartYear({ data }) {
     }
   ]);
 
+  const totalSum = sortedData.reduce((acc, item) => acc + item.totalBlackWhite + item.totalColor, 0);
+
   const size = {
-    // width: 550,
     height: 200,
   };
 
@@ -67,8 +69,8 @@ function PieChartYear({ data }) {
           }
         }}
         {...size}
-        >
-        <PieCenterLabel>รายปี</PieCenterLabel>
+      >
+        <PieCenterLabel totalSum={totalSum} />
       </PieChart>
     </div>
   );
