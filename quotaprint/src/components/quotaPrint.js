@@ -246,7 +246,18 @@ function QuotaPrint() {
                 aria-labelledby="modal-title"
                 aria-describedby="modal-description"
             >
-                <Box sx={{ width: 400, p: 3, backgroundColor: 'white', margin: 'auto', marginTop: '10%', borderRadius: 1, boxShadow: 3 }}>
+                <Box sx={{
+                         width: 'auto',
+                        maxWidth: '50%',
+                        maxHeight: '80vh',
+                        overflowY: 'auto',
+                        p: 3,
+                        backgroundColor: 'white',
+                        margin: 'auto',
+                        marginTop: '2%',
+                        borderRadius: 1,
+                        boxShadow: 3
+                    }}>
                     <h2 id="modal-title" style={{ textAlign: 'center' }}>Filter Options</h2>
                     <FormControl fullWidth margin="normal">
                         <InputLabel id="year-label">Select Year</InputLabel>
