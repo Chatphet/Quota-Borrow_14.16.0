@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { DataGrid } from '@mui/x-data-grid';
-import { TextField, Button, Modal, Box, FormControl, InputLabel, Select, MenuItem, Checkbox, FormControlLabel } from '@mui/material';
+import { TextField, Autocomplete, Button, Modal, Box, FormControl, InputLabel, Select, MenuItem, Checkbox, FormControlLabel } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import moment from 'moment';
@@ -68,10 +68,10 @@ function QuotaPrint() {
         };
 
         fetchData();
-    }, []);
+    }, []); // ทำให้ useEffect ทำงานเพียงครั้งเดียวเมื่อ component ถูกโหลด
 
     useEffect(() => {
-    
+        // Filter sumYearData based on filter criteria
         const filteredSumYear = sumYearData.filter(item => {
             const isYearMatch = !filterCriteria.year || item.year === filterCriteria.year;
             const isBlackWhiteMatch = !filterCriteria.blackWhite || item.totalBlackWhite > 0;
@@ -82,6 +82,7 @@ function QuotaPrint() {
 
         setFilteredSumYearData(filteredSumYear);
 
+        // Also filter sumUserData based on filter criteria
         const filteredSumUser = sumUserData.filter(item => {
             const isYearMatch = !filterCriteria.year || item.year === filterCriteria.year;
             return isYearMatch;
@@ -132,7 +133,7 @@ function QuotaPrint() {
     };
 
     const handleFilter = () => {
-
+        // Update filter criteria state
         setFilterCriteria({
             year: filterYear,
             blackWhite: filterBlackWhite,
@@ -240,6 +241,7 @@ function QuotaPrint() {
                 </div>
             </div>
 
+            {/* Filter Modal */}
             <Modal
                 open={filterModalOpen}
                 onClose={() => setFilterModalOpen(false)}
@@ -273,20 +275,20 @@ function QuotaPrint() {
                             ))}
                         </Select>
                     </FormControl>
-                    <FormControl fullWidth margin="normal">
-                        <InputLabel id="division-label">Select Division</InputLabel>
-                        <Select
-                            labelId="division-label"
-                            label="Select Division"
-                            value={filterDivision}
-                            onChange={(e) => setFilterDivision(e.target.value)}
-                        >
-                            <MenuItem value=""><em>None</em></MenuItem>
-                            {divisions.map(division => (
-                                <MenuItem key={division} value={division}>{division}</MenuItem>
-                            ))}
-                        </Select>
-                    </FormControl>
+                    <Autocomplete
+                        options={divisions}
+                        getOptionLabel={(option) => option}
+                        value={filterDivision}
+                        onChange={(event, newValue) => setFilterDivision(newValue)}
+                        renderInput={(params) => (
+                            <TextField
+                                {...params}
+                                label="Division"
+                                margin="normal"
+                                fullWidth
+                            />
+                        )}
+                    />
                     <TextField
                         label="Search User"
                         variant="outlined"
