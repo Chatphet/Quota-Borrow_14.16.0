@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { DataGrid } from '@mui/x-data-grid';
-import { TextField, Button, Modal, Box, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
+import { TextField, Autocomplete, Button, Modal, Box, FormControl, InputLabel, Select, MenuItem, /*Checkbox, FormControlLabel*/  } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import moment from 'moment';
@@ -10,6 +10,7 @@ function BorrowLaptop() {
     const [data, setData] = useState([]);
     const [sumYearData, setSumYearData] = useState([]);
     const [sumUserData, setSumUserData] = useState([]);
+    // const [filteredSumYearData, setFilteredSumYearData] = useState([]);
     const [filteredSumUserData, setFilteredSumUserData] = useState([]);
     const [searchText, setSearchText] = useState('');
     const [filteredData, setFilteredData] = useState([]);
@@ -35,7 +36,7 @@ function BorrowLaptop() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-   
+                // ดึงข้อมูลจาก API ทั้งหมดพร้อมกัน
                 const [divisionsResponse, statusesResponse, borrowStatusResponse, locationResponse, yearResponse] = await Promise.all([
                     axios.get('http://localhost:5000/api/division', { params: { table: 'BorrowNotebook' } }),
                     axios.get('http://localhost:5000/api/status'),
@@ -44,21 +45,24 @@ function BorrowLaptop() {
                     axios.get('http://localhost:5000/api/year', { params: { table: 'BorrowNotebook' } })
                 ]);
     
+                // แปลงข้อมูลจาก response เป็นข้อมูลที่ต้องการ
                 const divisionData = divisionsResponse.data.map(item => item.divisionName);
                 const statusData = statusesResponse.data.map(item => item.requestStatus);
                 const borrowStatusData = borrowStatusResponse.data.map(item => item.borrowStatusName);
                 const locationData = locationResponse.data.map(item => item.locationName);
     
+                // ตั้งค่าข้อมูลลงใน state
                 setDivisions(divisionData);
                 setStatuses(statusData);
                 setBorrowStatuses(borrowStatusData);
                 setLocations(locationData);
     
                 const sumYearData = yearResponse.data;
-                const yearData = [...new Set(sumYearData.map(item => item.year))].sort((a, b) => b - a);
+                const yearData = [...new Set(sumYearData.map(item => item.year))].sort((a, b) => b - a); // สร้างลิสต์ปีที่ไม่ซ้ำและเรียงลำดับจากมากไปน้อย
                 setYears(yearData);
                 setSumYearData(sumYearData);
     
+                // กำหนดปีล่าสุดเป็นค่าเริ่มต้นของฟิลเตอร์ปี และเรียก fetchFilteredData
                 if (sumYearData.length > 0) {
                     const mostRecentYear = Math.max(...sumYearData.map(item => item.year));
                     setFilterYear(mostRecentYear);
@@ -67,14 +71,26 @@ function BorrowLaptop() {
                 }
             } catch (error) {
                 console.error('Error fetching data:', error);
+                // คุณสามารถเพิ่มการจัดการข้อผิดพลาดที่ดีขึ้นที่นี่ เช่น การแสดงข้อความข้อผิดพลาด
             }
         };
     
         fetchData();
-    }, []);
+    }, []); // useEffect นี้จะทำงานเพียงครั้งเดียวเมื่อ component ถูกโหลด
     
     useEffect(() => {
-        
+        // // Filter sumYearData based on filter criteria
+        // const filteredSumYear = sumYearData.filter(item => {
+        //     const isYearMatch = !filterCriteria.year || item.year === filterCriteria.year;
+        //     const isBlackWhiteMatch = !filterCriteria.blackWhite || item.totalBlackWhite > 0;
+        //     const isColorMatch = !filterCriteria.color || item.totalColor > 0;
+
+        //     return isYearMatch && isBlackWhiteMatch && isColorMatch;
+        // });
+
+        // setFilteredSumYearData(filteredSumYear);
+
+        // Also filter sumUserData based on filter criteria
         const filteredSumUser = sumUserData.filter(item => {
             const isYearMatch = !filterCriteria.year || item.year === filterCriteria.year;
             return isYearMatch;
@@ -125,8 +141,10 @@ function BorrowLaptop() {
     };
 
     const handleFilter = () => {
+        // Update filter criteria state
         setFilterCriteria({
             year: filterYear,
+
         });
 
         fetchFilteredData(
@@ -204,6 +222,9 @@ function BorrowLaptop() {
         <div>
             <h1 style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '1%' }}>Borrow Laptop</h1>
             <div style={{ display: 'flex', justifyContent: 'space-between', margin: '10px' }}>
+                {/* <div style={{ flex: 1 }}>
+                    <PieChartYear data={filteredSumYearData} />
+                </div> */}
                 <div style={{ flex: 1 }}>
                     <PieChartBorrow data={filteredSumUserData} />
                 </div>
@@ -237,6 +258,7 @@ function BorrowLaptop() {
                 </div>
             </div>
 
+            {/* Filter Modal */}
             <Modal
                 open={filterModalOpen}
                 onClose={() => setFilterModalOpen(false)}
@@ -270,20 +292,20 @@ function BorrowLaptop() {
                             ))}
                         </Select>
                     </FormControl>
-                    <FormControl fullWidth margin="normal">
-                        <InputLabel id="division-label">Select Division</InputLabel>
-                        <Select
-                            labelId="division-label"
-                            label="Select Division"
-                            value={filterDivision}
-                            onChange={(e) => setFilterDivision(e.target.value)}
-                        >
-                            <MenuItem value=""><em>None</em></MenuItem>
-                            {divisions.map(division => (
-                                <MenuItem key={division} value={division}>{division}</MenuItem>
-                            ))}
-                        </Select>
-                    </FormControl>
+                    <Autocomplete
+                        options={divisions}
+                        getOptionLabel={(option) => option}
+                        value={filterDivision}
+                        onChange={(event, newValue) => setFilterDivision(newValue)}
+                        renderInput={(params) => (
+                            <TextField
+                                {...params}
+                                label="Division"
+                                margin="normal"
+                                fullWidth
+                            />
+                        )}
+                    />
                     <TextField
                         label="Search User"
                         variant="outlined"
