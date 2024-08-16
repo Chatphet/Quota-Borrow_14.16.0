@@ -68,10 +68,9 @@ function QuotaPrint() {
         };
 
         fetchData();
-    }, []); // ทำให้ useEffect ทำงานเพียงครั้งเดียวเมื่อ component ถูกโหลด
+    }, []);
 
     useEffect(() => {
-        // Filter sumYearData based on filter criteria
         const filteredSumYear = sumYearData.filter(item => {
             const isYearMatch = !filterCriteria.year || item.year === filterCriteria.year;
             const isBlackWhiteMatch = !filterCriteria.blackWhite || item.totalBlackWhite > 0;
@@ -82,7 +81,6 @@ function QuotaPrint() {
 
         setFilteredSumYearData(filteredSumYear);
 
-        // Also filter sumUserData based on filter criteria
         const filteredSumUser = sumUserData.filter(item => {
             const isYearMatch = !filterCriteria.year || item.year === filterCriteria.year;
             return isYearMatch;
@@ -133,7 +131,6 @@ function QuotaPrint() {
     };
 
     const handleFilter = () => {
-        // Update filter criteria state
         setFilterCriteria({
             year: filterYear,
             blackWhite: filterBlackWhite,
@@ -241,7 +238,6 @@ function QuotaPrint() {
                 </div>
             </div>
 
-            {/* Filter Modal */}
             <Modal
                 open={filterModalOpen}
                 onClose={() => setFilterModalOpen(false)}
