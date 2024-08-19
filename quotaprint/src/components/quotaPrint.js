@@ -276,6 +276,7 @@ function QuotaPrint() {
                         getOptionLabel={(option) => option}
                         value={filterDivision}
                         onChange={(event, newValue) => setFilterDivision(newValue)}
+                        isOptionEqualToValue={(option, value) => option === value || value === ""}
                         renderInput={(params) => (
                             <TextField
                                 {...params}
